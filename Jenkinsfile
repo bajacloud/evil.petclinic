@@ -5,24 +5,7 @@ node {
         checkout scm
     }
 
-    stage('Build Application') { 
-        steps {
-             echo '=== Building Petclinic Application ==='
-             sh './mvnw package -DskipTests' 
-             archiveArtifacts artifacts: 'target/dependency/*.jar'
-         }
-    }
-    stage('Test Application') {
-        steps {
-             echo '=== Testing Petclinic Application ==='
-              sh 'mvn test'
-        }
-        post {
-                always {
-                    junit '**/surefire-reports/TEST-*.xml'
-                }
-        }
-    }  
+  
     stage('Build image') {
         //This builds the actual image; synonymous to docker build on the command line
         app = docker.build("bajacloud/evilpetclinic", "--build-arg=pom.xml  .")
